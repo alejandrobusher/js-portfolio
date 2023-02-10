@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CopyPlugin = require("copy-webpack-plugin")
 const Dotenv = require("dotenv-webpack")
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 
 module.exports = {
     entry: "./src/index.js",
@@ -49,7 +50,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            inject: true,
+            inject: "body",
             template: "./public/index.html",
             filename: "./index.html"
         }),
@@ -65,11 +66,17 @@ module.exports = {
             ]
         }),
         new Dotenv(),
+        new BundleAnalyzerPlugin(),
     ],
     devServer: {
-        static: path.join(__dirname, "dist"),
+        static: {
+            directory: path.join(__dirname, "dist"),
+            watch: true,
+        },
+        watchFiles: path.join(__dirname, "./**"),
         compress: true,
         historyApiFallback: true,
-        port: 3006,
+        port: 3007,
+        open: true,
     },
 }
